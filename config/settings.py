@@ -1,0 +1,27 @@
+SETTINGS = {
+    "CAPTURE_INTERVAL_MS": 1000,
+    "CAPTURE_MONITOR": 1,
+    "MIN_CHANGE_THRESHOLD": 0.01,
+    "OCR_CONFIDENCE_THRESHOLD": 0.3,
+    "PATTERN_MATCH_CONFIDENCE": 0.9,
+    "AI_CLASSIFICATION_THRESHOLD": 0.75,
+    "ALERT_COOLDOWN_SECONDS": 3,
+    "AUTO_BLUR_ENABLED": True,
+    "SCREENSHOT_GUARD_ENABLED": True,
+    "BLUR_RADIUS": 25,
+    "USE_NPU_ACCELERATION": True,
+    "ONNX_EXECUTION_PROVIDER": "QNNExecutionProvider",
+    "FALLBACK_PROVIDER": "CPUExecutionProvider",
+    "DETECTION_CATEGORIES": [
+        "api_key", "password", "credit_card", "ssn",
+        "private_key", "database_connection", "jwt_token",
+        "aws_credentials", "phone_number", "personal_document"
+    ],
+    "LOG_LEVEL": "INFO",
+    "LOG_FILE": "ai_guardian.log",
+    "DB_PATH": "guardian_events.db",
+    "MAX_LOG_ENTRIES": 10000,
+    "THEME": "dark",
+    "OVERLAY_OPACITY": 0.85,
+    "NOTIFICATION_DURATION_MS": 5000,
+}
