@@ -5,7 +5,7 @@
 
 ![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![ONNX](https://img.shields.io/badge/ONNX-Runtime-005CED?style=for-the-badge&logo=onnx&logoColor=white)
-![PyQt5](https://img.shields.io/badge/PyQt5-UI-41CD52?style=for-the-badge&logo=qt&logoColor=white)
+![PyQt5](https://img.shields.io/badge/PyQt5-5.x-41CD52?style=for-the-badge&logo=qt&logoColor=white)
 ![Platform](https://img.shields.io/badge/Platform-Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
 ![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)
@@ -27,8 +27,8 @@
 ## 📌 Table of Contents
 
 - [Overview](#-overview)
-- [Features](#-features)
 - [What It Detects](#-what-it-detects)
+- [Features](#-features)
 - [How It Works](#-how-it-works)
 - [Tech Stack](#-tech-stack)
 - [Project Structure](#-project-structure)
@@ -37,22 +37,41 @@
 - [Demo Output](#-demo-output)
 - [Deployment Status](#-deployment-status)
 - [Privacy and Security](#-privacy-and-security)
+- [Contributing](#-contributing)
+- [License](#-license)
 - [Author](#-author)
 
 ---
 
 ## 🔍 Overview
 
-**AI Guardian** is a real-time desktop application that silently monitors your screen and detects sensitive information before it causes a data breach. It runs entirely on your machine with **zero cloud connectivity**, ensuring your privacy is protected every moment.
+**AI Guardian** is a real-time, on-device privacy and screen-safety agent designed to protect your sensitive data from accidental exposure. It continuously monitors your screen, detects confidential information in real time, and alerts you instantly when risks are detected.
+
+The application combines advanced screen capture, OCR (Optical Character Recognition), regex pattern matching, and a lightweight ONNX-based AI classifier to assess privacy threats. All detection and processing happens entirely on your machine with **zero cloud connectivity**, ensuring maximum privacy.
 
 ### Why It Matters
 
-- **Remote Workers**: Accidentally expose credentials during screen sharing sessions
-- **Public Spaces**: Confidential documents visible to bystanders
-- **Live Coding**: API keys committed or displayed during demonstrations
-- **Financial Impact**: Data breaches cost an average of **$4.45 million** per incident (IBM 2023)
+- **Remote Workers**: Accidentally expose credentials during screen-sharing sessions
+- **Confidential Documents**: Visible in public spaces or on unattended screens
+- **Live Coding Sessions**: API keys displayed during demonstrations or tutorials
+- **Data Breach Cost**: Average cost of a data breach is **$4.45 million** per incident (IBM 2023)
 
-**AI Guardian protects you silently, instantly, and privately.**
+**AI Guardian protects you silently, instantly, and completely locally.**
+
+---
+
+## 🎯 What It Detects
+
+AI Guardian identifies 6+ categories of sensitive data with precision:
+
+| Category | Examples | Severity |
+|----------|---------|----------|
+| 🔑 **API Keys & Tokens** | AWS, OpenAI, GitHub, Stripe, etc. | 🔴 CRITICAL |
+| 🔐 **Passwords & Credentials** | Login details, secret keys, auth tokens | 🔴 CRITICAL |
+| 💳 **Payment Card Numbers** | Visa, Mastercard, Amex, CVV codes | 🔴 CRITICAL |
+| 🪪 **Personal Identification** | SSN, passport, driver license numbers | 🟠 HIGH |
+| 🗄️ **Database Credentials** | PostgreSQL, MySQL, connection strings | 🟠 HIGH |
+| 📄 **Private Keys** | RSA, SSH, PEM certificates | 🔴 CRITICAL |
 
 ---
 
@@ -61,80 +80,69 @@
 | Feature | Description |
 |---------|-------------|
 | 🖥️ **Real-Time Monitoring** | Continuously captures and analyzes screen content without interrupting your workflow |
-| 🔍 **OCR Text Extraction** | Extracts all visible text from screen frames using advanced OCR engine |
-| 🧩 **Pattern Matching** | Regex-based detection for 20+ sensitive data patterns |
-| 🧠 **AI Classification** | ONNX MobileNetV2 model classifies privacy risk levels in real time |
-| 🚨 **Instant Alerts** | Notifies user immediately when sensitive content is detected |
-| 📵 **Screenshot Blocking** | Prevents screenshots when sensitive data is visible on screen |
-| 📋 **Event Logging** | All detection events logged securely in local SQLite database |
-| ⚡ **NPU Acceleration** | Optimized for Snapdragon NPU/QNN hardware acceleration |
-| 🔄 **CPU Fallback** | Auto fallback to optimized CPU inference on unsupported systems |
-| 🔒 **100% Local Processing** | Zero cloud dependency — all processing happens on your machine |
-
----
-
-## 🎯 What It Detects
-
-| Category | Examples | Severity |
-|----------|---------|----------|
-| 🔑 **API Keys & Tokens** | AWS, OpenAI, GitHub, Stripe keys | CRITICAL |
-| 🔐 **Passwords & Credentials** | Login details, secret keys | CRITICAL |
-| 💳 **Payment Card Numbers** | Visa, Mastercard, Amex, CVV | CRITICAL |
-| 🪪 **Personal Identification** | SSN, personal info, ID numbers | HIGH |
-| 🗄️ **Database Credentials** | PostgreSQL, MySQL connection strings | HIGH |
-| 📄 **Private Keys** | RSA, SSH, PEM certificates | CRITICAL |
+| 🔍 **OCR Text Extraction** | Advanced OCR engine extracts all visible text from screen frames in real time |
+| 🧩 **Pattern Matching** | 20+ regex patterns identify sensitive data with high accuracy |
+| 🧠 **AI Classification** | ONNX MobileNetV2 model evaluates privacy risk levels intelligently |
+| 🚨 **Instant Alerts** | User receives immediate notifications when sensitive content is detected |
+| 📵 **Screenshot Blocking** | Automatically prevents screenshots when sensitive data is visible |
+| 📋 **Event Logging** | All detection events securely logged in local SQLite database |
+| ⚡ **NPU Acceleration** | Optimized for Snapdragon NPU/QNN hardware acceleration (target platform) |
+| 🔄 **CPU Fallback** | Seamless automatic fallback to optimized CPU inference on unsupported systems |
+| 🔒 **100% Local Processing** | Zero cloud dependency — all processing happens entirely on your machine |
 
 ---
 
 ## ⚙️ How It Works
 
+The detection pipeline follows a structured 9-step process:
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                     AI Guardian Pipeline                         │
+│                    AI Guardian Detection Pipeline                │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                   │
-│   STEP 1          STEP 2          STEP 3          STEP 4        │
-│  Screen    →     OCR Text    →   Pattern    →    AI Model   →  │
-│  Capture        Extraction       Matching        Classifier     │
+│  STEP 1          STEP 2           STEP 3          STEP 4         │
+│  Screen    →     OCR Text    →    Pattern    →   AI Model   →   │
+│  Capture        Extraction        Matching       Classifier      │
 │                                                                   │
-│   STEP 5          STEP 6          STEP 7          STEP 8        │
-│   Risk    →     Severity     →   User Alert   →   Screenshot   │
-│ Assessment     Determination      Popup           Blocked        │
+│  STEP 5          STEP 6           STEP 7          STEP 8         │
+│  Risk    →      Severity     →    User Alert   →  Screenshot    │
+│  Assessment     Determination      Popup         Blocked         │
 │                                                                   │
-│   STEP 9                                                         │
-│  Event Logged to Local Database                                  │
+│                           STEP 9                                 │
+│                    Event Logged to Database                      │
 │                                                                   │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### Detailed Pipeline Steps
+### Detailed Pipeline Breakdown
 
-| Step | Module | Function | Input | Output |
-|------|--------|----------|-------|--------|
-| 1️⃣ | `screen_capture.py` | Capture screen frames periodically | System display | Frame image |
-| 2️⃣ | `ocr_engine.py` | Extract all visible text | Screen frame | Extracted text |
-| 3️⃣ | `pattern_matcher.py` | Scan with regex patterns | Extracted text | Matched patterns |
-| 4️⃣ | `ai_classifier.py` | ONNX model scoring | Pattern matches | Risk score |
-| 5️⃣ | `sensitive_detector.py` | Assess overall risk | Risk scores | Risk assessment |
-| 6️⃣ | `sensitive_detector.py` | Determine severity level | Risk assessment | CRITICAL/HIGH/MEDIUM |
-| 7️⃣ | `alert_popup.py` | Notify user with details | Severity level | Alert notification |
-| 8️⃣ | `screenshot_guard.py` | Block screenshots | Sensitive data detected | Screenshot prevented |
-| 9️⃣ | `event_logger.py` | Log event to database | Detection data | SQLite record |
+| Step | Module | Input | Process | Output |
+|------|--------|-------|---------|--------|
+| 1️⃣ | `screen_capture.py` | System display | Capture screen at regular intervals | Screen frame image |
+| 2️⃣ | `ocr_engine.py` | Screen frame | Extract all visible text using OCR | Extracted text content |
+| 3️⃣ | `pattern_matcher.py` | Text content | Scan with 20+ regex patterns | Pattern match results |
+| 4️⃣ | `ai_classifier.py` | Pattern matches | ONNX model inference for risk scoring | Risk score (0-1) |
+| 5️⃣ | `sensitive_detector.py` | All scores | Aggregate and evaluate overall risk | Risk assessment result |
+| 6️⃣ | `sensitive_detector.py` | Risk assessment | Determine severity level | CRITICAL / HIGH / MEDIUM |
+| 7️⃣ | `alert_popup.py` | Severity + details | Display alert notification to user | User-facing alert |
+| 8️⃣ | `screenshot_guard.py` | Sensitive data flag | Intercept and block screenshots | Screenshot prevented |
+| 9️⃣ | `event_logger.py` | Detection data | Log to local SQLite database | Persistent event record |
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Technology | Version | Purpose |
-|-----------|---------|---------|
-| **Python** | 3.8+ | Core application language |
-| **ONNX Runtime** | Latest | AI model inference engine |
-| **MobileNetV2** | ONNX Format | Lightweight neural network for privacy classification |
-| **Tesseract/EasyOCR** | Latest | Optical Character Recognition engine |
-| **PyQt5** | 5.x | Desktop UI framework and system tray |
-| **SQLite3** | Built-in | Local event logging database |
-| **Snapdragon NPU/QNN** | Target | Hardware acceleration (HP Snapdragon PCs) |
-| **CPU Inference** | Fallback | Automatic CPU fallback for compatibility |
+| Technology | Version | Purpose | Notes |
+|-----------|---------|---------|-------|
+| **Python** | 3.8+ | Core application language | Ensures broad compatibility |
+| **ONNX Runtime** | Latest | AI model inference engine | Lightweight, cross-platform |
+| **MobileNetV2** | ONNX format | Privacy risk classifier | Efficient neural network |
+| **OCR Engine** | Latest | Text extraction from screen | Tesseract/EasyOCR support |
+| **PyQt5** | 5.x | Desktop UI framework | Professional desktop application |
+| **SQLite3** | Built-in | Local event logging database | No external DB required |
+| **Snapdragon NPU/QNN** | Target | Hardware acceleration | HP Snapdragon PC optimization |
+| **CPU Inference** | Fallback | CPU-based processing | Automatic fallback mode |
 
 ---
 
@@ -144,15 +152,15 @@
 ai-guardian/
 │
 ├── 📄 main.py                          ← Application entry point
-├── 📄 demo_test.py                     ← Detection demo script
-├── 📄 requirements.txt                 ← Python dependencies
-├── 📄 .gitignore                       ← Git ignore rules
+├── 📄 demo_test.py                     ← Detection demo/test script
+├── 📄 requirements.txt                 ← Python package dependencies
+├── 📄 .gitignore                       ← Git ignore configuration
 ├── 📄 README.md                        ← This file
 ├── 🗄️ guardian_events.db               ← Local SQLite event database
 │
 ├── 📂 core/                            ← Core detection engine
-│   ├── ai_classifier.py                ├─ ONNX AI model classifier
-│   ├── npu_accelerator.py              ├─ Snapdragon NPU/QNN support
+│   ├── ai_classifier.py                ├─ ONNX AI model inference
+│   ├── npu_accelerator.py              ├─ Snapdragon NPU/QNN integration
 │   ├── ocr_engine.py                   ├─ OCR text extraction
 │   ├── pattern_matcher.py              ├─ Regex pattern matching engine
 │   ├── screen_capture.py               ├─ Screen capture module
@@ -160,29 +168,29 @@ ai-guardian/
 │
 ├── 📂 ui/                              ← User Interface Layer
 │   ├── main_window.py                  ├─ Main application window
-│   ├── alert_popup.py                  ├─ Alert notification popup
-│   ├── dashboard.py                    ├─ Dashboard statistics view
+│   ├── alert_popup.py                  ├─ Alert notification UI
+│   ├── dashboard.py                    ├─ Statistics and monitoring dashboard
 │   ├── overlay_widget.py               ├─ Screen overlay widget
-│   ├── settings_panel.py               ├─ Settings configuration panel
+│   ├── settings_panel.py               ├─ Settings and configuration UI
 │   └── system_tray.py                  └─ System tray integration
 │
-├── 📂 security/                        ← Security modules
-│   ├── event_logger.py                 ├─ Detection event logger
-│   ├── redactor.py                     ├─ Sensitive data redactor
+├── 📂 security/                        ← Security and Privacy Modules
+│   ├── event_logger.py                 ├─ Detection event logging
+│   ├── redactor.py                     ├─ Sensitive data redaction
 │   └── screenshot_guard.py             └─ Screenshot blocking guard
 │
 ├── 📂 models/                          ← AI Models
-│   ├── model_manager.py                ├─ Model loading and management
+│   ├── model_manager.py                ├─ Model loading and caching
 │   └── cached/
-│       └── mobilenetv2.onnx            └─ ONNX model weights
+│       └── mobilenetv2.onnx            └─ Pre-trained ONNX model weights
 │
-├── 📂 config/                          ← Configuration
+├── 📂 config/                          ← Application Configuration
 │   └── settings.py                     └─ App settings and defaults
 │
 ├── 📂 tests/                           ← Unit Tests
 │   └── test_patterns.py                └─ Pattern matcher unit tests
 │
-└── 📂 assets/                          ← UI Assets
+└── 📂 assets/                          ← UI Assets and Resources
     └── styles/
         └── dark_theme.qss              └─ Dark theme stylesheet
 ```
@@ -193,11 +201,15 @@ ai-guardian/
 
 ### Prerequisites
 
-Ensure you have Python 3.8 or higher installed on your system.
+- **Python 3.8 or higher** installed on your system
+- **pip** package manager
+- Windows 10/11 operating system (primary target)
+
+### Verify Python Installation
 
 ```bash
-# Check Python version
 python --version
+# Should output: Python 3.8.x or higher
 ```
 
 ### Step 1: Clone the Repository
@@ -207,7 +219,7 @@ git clone https://github.com/sai-chaitanya-reddy/ai-guardian.git
 cd ai-guardian
 ```
 
-### Step 2: Create Virtual Environment (Optional but Recommended)
+### Step 2: Create Virtual Environment (Recommended)
 
 ```bash
 # Windows
@@ -228,7 +240,7 @@ pip install -r requirements.txt
 ### Step 4: Verify Installation
 
 ```bash
-# Run the demo to verify everything is working
+# Run the detection demo to verify everything works
 python demo_test.py
 ```
 
@@ -236,69 +248,75 @@ python demo_test.py
 
 ## 🎮 Usage
 
-### Launch the Full Application
+### Launch AI Guardian
 
-Start AI Guardian with the main GUI:
+Start the full application with GUI:
 
 ```bash
 python main.py
 ```
 
-The application will:
-- Appear in your system tray
-- Begin monitoring your screen in real-time
-- Display alerts when sensitive content is detected
-- Log all events to the local database
+**What happens:**
+- Application launches with system tray integration
+- Begins monitoring your screen in real time
+- Displays alerts when sensitive content is detected
+- Logs all detection events to local database
+- Can be minimized to system tray while running
 
 ### Run Detection Demo
 
-Test the detection capabilities without running the full application:
+Test detection capabilities without running the full application:
 
 ```bash
 python demo_test.py
 ```
 
-This will:
-- Display sample sensitive data scenarios
-- Show detection results for each
-- Demonstrate how data is redacted
-- Indicate alert severity levels
+**Features:**
+- Displays various sensitive data scenarios
+- Shows detection results and severity levels
+- Demonstrates how sensitive data is redacted
+- Verifies all detection patterns are working
 
 ### Run Unit Tests
 
 Verify pattern matching functionality:
 
 ```bash
-python -m pytest tests/
+python -m pytest tests/ -v
 ```
 
 ### Configuration
 
-Edit `config/settings.py` to customize:
+Edit `config/settings.py` to customize behavior:
 
 ```python
-# Detection sensitivity
-SENSITIVITY_LEVEL = "HIGH"  # LOW, MEDIUM, HIGH, CRITICAL
+# Detection sensitivity level
+SENSITIVITY_LEVEL = "HIGH"  # Options: LOW, MEDIUM, HIGH, CRITICAL
 
-# Scanning frequency (milliseconds)
+# Screen monitoring frequency (milliseconds)
 SCAN_INTERVAL = 1000
 
 # Enable/disable specific detectors
 ENABLE_API_KEY_DETECTION = True
 ENABLE_CREDIT_CARD_DETECTION = True
 ENABLE_PII_DETECTION = True
+ENABLE_PASSWORD_DETECTION = True
 
-# Alert behavior
-AUTO_BLOCK_SCREENSHOTS = True
-SHOW_ALERT_POPUP = True
-LOG_TO_DATABASE = True
+# Alert and action settings
+AUTO_BLOCK_SCREENSHOTS = True      # Block screenshots when sensitive data detected
+SHOW_ALERT_POPUP = True            # Display alert notifications
+LOG_TO_DATABASE = True             # Save events to SQLite database
+
+# NPU/CPU settings
+USE_NPU_IF_AVAILABLE = True        # Use Snapdragon NPU if available
+FALLBACK_TO_CPU = True             # Auto-fallback to CPU inference
 ```
 
 ---
 
 ## 🖥️ Demo Output
 
-Running `python demo_test.py` produces:
+Running `python demo_test.py` produces the following output:
 
 ```
 ============================================================
@@ -307,59 +325,76 @@ Running `python demo_test.py` produces:
 
 Scenario: AWS Credentials
   ------------------------------------------------
-  [CRITICAL] AWS Access Key
+  [CRITICAL] AWS Access Key Detected
+    Pattern: AWS Access Key ID format
     Detected: AKIA2X5PQWERTY1EXAMPLE
     Redacted: [AKIA***EXAMPLE]
     Alert Level: CRITICAL
+    Action: Screenshot would be blocked
 
 Scenario: OpenAI API Key
   ------------------------------------------------
-  [CRITICAL] OpenAI API Key
+  [CRITICAL] OpenAI API Key Detected
+    Pattern: OpenAI sk-* token format
     Detected: sk-proj-1234567890abcdefghij
     Redacted: [sk-***aaaa]
     Alert Level: CRITICAL
+    Action: Screenshot would be blocked
 
-Scenario: Credit Card
+Scenario: Credit Card Number
   ------------------------------------------------
-  [CRITICAL] Credit Card Number
+  [CRITICAL] Credit Card Number Detected
+    Pattern: Visa/Mastercard/Amex format
     Detected: 4532-1234-5678-0366
     Redacted: [4532***0366]
     Alert Level: CRITICAL
+    Action: Screenshot would be blocked
 
-Scenario: Private RSA Key
+Scenario: RSA Private Key
   ------------------------------------------------
-  [CRITICAL] RSA Private Key
+  [CRITICAL] Private Key Detected
+    Pattern: RSA/SSH private key format
     Detected: -----BEGIN RSA PRIVATE KEY-----
     Redacted: [-----BEGIN***-----]
     Alert Level: CRITICAL
+    Action: Screenshot would be blocked
 
-Scenario: GitHub Token
+Scenario: GitHub Personal Access Token
   ------------------------------------------------
-  [HIGH] GitHub Token
+  [HIGH] GitHub Token Detected
+    Pattern: GitHub ghp_* token format
     Detected: ghp_16C7e42F292c6912E7710c838347Ae178B4a
     Redacted: [ghp_***XXXX]
     Alert Level: HIGH
+    Action: Alert notification shown
 
 Scenario: Database Connection String
   ------------------------------------------------
-  [HIGH] Database Credentials
+  [HIGH] Database Credentials Detected
+    Pattern: PostgreSQL/MySQL connection URL
     Detected: postgresql://admin:password@prod.db.com:5432
     Redacted: [postgresql://***@prod.db.com]
     Alert Level: HIGH
+    Action: Alert notification shown
 
 Scenario: Stripe API Key
   ------------------------------------------------
-  [HIGH] Stripe API Key
+  [HIGH] Stripe API Key Detected
+    Pattern: Stripe pk_test_* or pk_live_* format
     Detected: pk_test_4eC39HqLyjWDarhtT1ZdV7x
     Redacted: [pk_test_***XXXX]
     Alert Level: HIGH
+    Action: Alert notification shown
 
 Scenario: Safe Content
   ------------------------------------------------
-  ✅ SAFE -- No sensitive content detected
+  ✅ SAFE
+  No sensitive content detected
+  No action required
 
 ============================================================
-  Demo completed!  Run: python main.py
+  Demo Completed Successfully!
+  Run: python main.py
 ============================================================
 ```
 
@@ -367,60 +402,118 @@ Scenario: Safe Content
 
 ## 📊 Deployment Status
 
-| Environment | Inference Mode | Status | Notes |
-|------------|---|---|---|
-| **Intel/AMD CPU** | ONNX CPU Inference | ✅ Tested | Works on development machines |
-| **Snapdragon PC** | Snapdragon NPU/QNN | 🎯 Optimized | Target deployment platform |
-| **Other Devices** | CPU Fallback (Auto) | ⚡ Compatible | Automatic fallback maintains full functionality |
+### Platform Support Matrix
 
-### Current Status
+| Environment | Hardware | Inference Mode | Status | Notes |
+|-------------|----------|---|---|---|
+| **Development** | Intel/AMD CPU | ONNX CPU Inference | ✅ Tested & Working | Current development platform |
+| **Target** | Snapdragon NPU | Snapdragon NPU/QNN | 🎯 Optimized | HP Snapdragon PC optimization |
+| **Fallback** | Any CPU | CPU Inference (Auto) | ⚡ Compatible | Automatic fallback on all devices |
 
-- ✅ **Development**: Fully functional with CPU inference
-- 🎯 **Target**: Snapdragon-powered HP PCs with NPU acceleration
-- ⚡ **Compatibility**: Runs on any Windows device with automatic fallback
+### Current Implementation Status
 
-> **Note**: The application is designed and optimized for deployment on Snapdragon-powered HP PCs with dedicated NPU hardware acceleration. On unsupported systems, including development environments, it seamlessly falls back to optimized CPU inference while maintaining 100% functionality.
+- ✅ **Development Environment**: Fully functional with ONNX CPU inference on Intel/AMD processors
+- ✅ **CPU Fallback**: Tested and working on non-Snapdragon systems
+- 🎯 **Snapdragon NPU Target**: Application architected for NPU acceleration on HP Snapdragon PCs
+- ⚡ **Seamless Fallback**: Automatically detects hardware and uses CPU inference when NPU is unavailable
+
+### Important Notes
+
+> **Note on Platform Support**: The application is **designed and optimized** for deployment on Snapdragon-powered HP PCs with dedicated NPU hardware acceleration. Current testing has been performed on Intel/AMD CPU systems using ONNX CPU inference. On unsupported systems, the application seamlessly falls back to optimized CPU inference while maintaining 100% functionality across all features.
 
 ---
 
 ## 🔐 Privacy and Security
 
+### Security Guarantees
+
 | Principle | Status | Details |
 |-----------|--------|---------|
-| **Local Processing Only** | ✅ Verified | All detection happens entirely on your device |
-| **No Cloud APIs** | ✅ Verified | Zero communication with external servers |
-| **No Remote Storage** | ✅ Verified | Screen content never leaves your machine |
-| **Open Source** | ✅ Available | Full code transparency — inspect everything |
-| **Secure Logging** | ✅ Verified | Events stored only in local SQLite database |
+| **100% Local Processing** | ✅ Verified | All detection and inference happens entirely on your device |
+| **Zero Cloud Connectivity** | ✅ Verified | No communication with external servers or cloud services |
+| **No Remote Data Storage** | ✅ Verified | Screen content never leaves your machine |
+| **Open Source** | ✅ Available | Full code transparency — audit every line |
+| **Secure Event Logging** | ✅ Verified | Events stored only in local SQLite database |
 | **Screenshot Protection** | ✅ Verified | Actively blocks screenshots when sensitive data is visible |
 | **Zero Telemetry** | ✅ Verified | No usage data collected or transmitted |
-| **No AI Training** | ✅ Verified | Your data never used to train AI models |
+| **No Model Training** | ✅ Verified | Your data never used to train AI models |
 
-### Privacy Guarantees
+### Privacy Architecture
 
-1. **On-Device Processing**: All inference happens locally using ONNX Runtime
-2. **No Network Communication**: Application has no internet connectivity requirements
-3. **Secure Event Storage**: Detection events stored in local SQLite database
-4. **User Control**: You control all settings and can view/delete logs anytime
-5. **Transparent Code**: Open source means you can audit every line
+1. **On-Device Processing Only**
+   - All OCR, pattern matching, and AI inference happens locally
+   - Uses ONNX Runtime for efficient local model execution
+   - No data ever sent to cloud services
+
+2. **No Network Communication**
+   - Application has zero external dependencies
+   - No internet connectivity required
+   - Fully functional in air-gapped environments
+
+3. **Secure Local Storage**
+   - Detection events logged to local SQLite database
+   - Database stored in user's home directory
+   - User has full control and visibility
+
+4. **User Control**
+   - Users control all settings and can view logs anytime
+   - Screenshots can be managed and deleted
+   - Full transparency into all operations
+
+5. **Code Transparency**
+   - Open source repository for independent auditing
+   - No obfuscated or proprietary code
+   - Community can verify security claims
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! To contribute:
+We welcome contributions! To contribute to AI Guardian:
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+### How to Contribute
+
+1. **Fork the repository**
+   ```bash
+   # Click "Fork" on GitHub
+   ```
+
+2. **Create a feature branch**
+   ```bash
+   git checkout -b feature/amazing-feature
+   ```
+
+3. **Make your changes**
+   ```bash
+   # Edit, test, and commit your work
+   git add .
+   git commit -m 'Add amazing feature'
+   ```
+
+4. **Push to your branch**
+   ```bash
+   git push origin feature/amazing-feature
+   ```
+
+5. **Open a Pull Request**
+   - Provide clear description of changes
+   - Reference any related issues
+   - Include test results
+
+### Development Guidelines
+
+- Follow PEP 8 Python style guidelines
+- Add unit tests for new features
+- Update documentation
+- Test on multiple Python versions (3.8+)
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for complete details.
+
+**In summary**: You are free to use, modify, and distribute this software for any purpose, provided you include the original license text.
 
 ---
 
@@ -430,21 +523,31 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 
 **Bussireddy Sai Chaitanya Reddy**
 
-Solo Developer — AI Guardian Project
+Solo Developer | Security & Privacy Enthusiast
 
-[GitHub Profile](https://github.com/sai-chaitanya-reddy) • [Repository](https://github.com/sai-chaitanya-reddy/ai-guardian)
+[🔗 GitHub Profile](https://github.com/sai-chaitanya-reddy) • [📦 Repository](https://github.com/sai-chaitanya-reddy/ai-guardian) • [📧 Email](mailto:sai.chaitanya.reddy.in@gmail.com)
 
 </div>
 
 ---
 
-## 🛡️ Support
+## 🆘 Support & Issues
+
+### Getting Help
 
 If you encounter issues or have questions:
 
-1. Check existing [Issues](https://github.com/sai-chaitanya-reddy/ai-guardian/issues)
-2. Review [Documentation](https://github.com/sai-chaitanya-reddy/ai-guardian/wiki)
-3. Create a new Issue with detailed information
+1. **Check Existing Issues**: [Search GitHub Issues](https://github.com/sai-chaitanya-reddy/ai-guardian/issues)
+2. **Review Documentation**: See this README and code comments
+3. **Create a New Issue**: [Report a bug or request feature](https://github.com/sai-chaitanya-reddy/ai-guardian/issues/new)
+
+### Reporting Bugs
+
+When reporting bugs, please include:
+- Operating system and Python version
+- Steps to reproduce the issue
+- Expected vs. actual behavior
+- Error messages and logs
 
 ---
 
@@ -454,12 +557,18 @@ If you encounter issues or have questions:
 
 **Protecting Your Privacy with On-Device AI**
 
-All sensitive data detection occurs 100% on-device.
-
+All sensitive data detection occurs 100% on-device.  
 Zero cloud dependency. Zero data exposure. Zero compromise.
 
 <br/>
 
-**Built with** ![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white) ![ONNX](https://img.shields.io/badge/ONNX-005CED?style=flat&logo=onnx&logoColor=white) ![PyQt5](https://img.shields.io/badge/PyQt5-41CD52?style=flat&logo=qt&logoColor=white)
+**Built with** 
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white) 
+![ONNX](https://img.shields.io/badge/ONNX-005CED?style=flat&logo=onnx&logoColor=white) 
+![PyQt5](https://img.shields.io/badge/PyQt5-41CD52?style=flat&logo=qt&logoColor=white)
+
+<br/><br/>
+
+⭐ If you find AI Guardian useful, please consider giving it a star! ⭐
 
 </div>
