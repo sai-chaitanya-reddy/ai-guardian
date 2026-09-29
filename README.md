@@ -7,15 +7,18 @@
 ![ONNX](https://img.shields.io/badge/ONNX-Runtime-005CED?style=for-the-badge&logo=onnx&logoColor=white)
 ![PyQt5](https://img.shields.io/badge/PyQt5-UI-41CD52?style=for-the-badge&logo=qt&logoColor=white)
 ![Platform](https://img.shields.io/badge/Platform-Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
+![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)
 
-> **AI Guardian** is an on-device privacy and screen-safety agent that
-> continuously monitors screen content to detect and alert users about
-> sensitive information — all processed **locally**, with zero cloud exposure.
+<br/>
 
----
+> 🔒 **AI Guardian** continuously monitors your screen for sensitive information —
+> API keys, passwords, credit cards, and confidential data —
+> and alerts you **instantly**, with all processing done **100% on-device**.
 
-**Developed by Bussireddy Sai Chaitanya Reddy** — Solo Project
+<br/>
+
+### 👨‍💻 Developed by **Bussireddy Sai Chaitanya Reddy** &nbsp;|&nbsp; Solo Project
 
 </div>
 
@@ -30,29 +33,37 @@
 - [Project Structure](#-project-structure)
 - [Installation](#-installation)
 - [Usage](#-usage)
-- [Demo](#-demo)
+- [Demo Output](#-demo-output)
 - [Deployment Status](#-deployment-status)
+- [Privacy and Security](#-privacy-and-security)
 - [Author](#-author)
 
 ---
 
 ## 🔍 Overview
 
-AI Guardian is a real-time desktop application that monitors your screen
-for sensitive information such as:
+**AI Guardian** is a real-time desktop application that silently monitors your screen
+and detects sensitive information before it causes a data breach.
 
-- 🔑 API Keys & Tokens (AWS, OpenAI, GitHub, Stripe)
-- 🔐 Passwords & Credentials
-- 💳 Credit Card Numbers & CVV
-- 🪪 Personal Identification Data
-- 🗄️ Database URLs & Connection Strings
-- 📄 Private Keys & Certificates
+### What It Detects
 
-When sensitive content is detected, AI Guardian **immediately alerts the user**
-and can **block screenshots** to prevent accidental data exposure.
+| Category | Examples |
+|----------|---------|
+| 🔑 API Keys and Tokens | AWS, OpenAI, GitHub, Stripe keys |
+| 🔐 Passwords and Credentials | Login details, secret keys |
+| 💳 Credit Card and CVV | Visa, Mastercard, Amex numbers |
+| 🪪 Personal Identification | SSN, personal info, ID numbers |
+| 🗄️ Database Credentials | PostgreSQL, MySQL connection strings |
+| 📄 Private Keys | RSA, SSH, PEM certificates |
 
-All processing happens **entirely on your local device** —
-no data is ever sent to external servers or cloud APIs.
+### Why It Matters
+
+- Remote workers accidentally expose credentials during screen sharing
+- Confidential documents visible in public spaces
+- API keys committed or displayed during live coding sessions
+- Data breaches cost an average of **$4.45 million** per incident (IBM 2023)
+
+**AI Guardian protects you silently, instantly, and privately.**
 
 ---
 
@@ -60,16 +71,16 @@ no data is ever sent to external servers or cloud APIs.
 
 | Feature | Description |
 |---------|-------------|
-| 🖥️ **Real-Time Monitoring** | Continuously captures and analyzes screen content |
-| 🔍 **OCR Text Extraction** | Extracts visible text using OCR engine |
-| 🧩 **Pattern Matching** | Regex-based detection for credentials and sensitive patterns |
-| 🧠 **AI Classification** | ONNX-based MobileNetV2 model classifies privacy risk levels |
-| 🚨 **Instant Alerts** | Notifies user immediately when sensitive content is found |
-| 📵 **Screenshot Blocking** | Prevents accidental exposure by blocking screenshots |
-| 📋 **Event Logging** | Logs all detection events securely for later review |
+| 🖥️ **Real-Time Monitoring** | Continuously captures and analyzes screen content without interrupting workflow |
+| 🔍 **OCR Text Extraction** | Extracts all visible text from screen frames using OCR engine |
+| 🧩 **Pattern Matching** | Regex-based detection for 20+ sensitive data patterns |
+| 🧠 **AI Classification** | ONNX MobileNetV2 model classifies privacy risk levels in real time |
+| 🚨 **Instant Alerts** | Notifies user immediately when sensitive content is detected |
+| 📵 **Screenshot Blocking** | Blocks screenshots when sensitive data is visible on screen |
+| 📋 **Event Logging** | All detection events logged securely in local SQLite database |
 | ⚡ **NPU Acceleration** | Designed for Snapdragon NPU/QNN hardware acceleration |
-| 🔄 **CPU Fallback** | Seamlessly falls back to CPU on unsupported systems |
-| 🔒 **Local Processing** | Zero cloud dependency — 100% on-device |
+| 🔄 **CPU Fallback** | Auto fallback to optimized CPU inference on unsupported systems |
+| 🔒 **Local Processing** | Zero cloud dependency — 100% on-device, zero data leaves machine |
 
 ---
 
